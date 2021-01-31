@@ -5,16 +5,18 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/features2d/features2d.hpp>
 
-#include <cvb_blob_list.h>
+#include "cvb_blob_list.h"
 
 #include <Windows.h>
 
 int main(int argc, char* argv[]) {
-    cv::Mat img = cv::imread("test.png", 1);
+    cv::Mat img = cv::imread("test1.png",1);
     cv::Mat grey;
     grey.create(img.size(), CV_8UC1);
-    cv::cvtColor(img, grey, CV_BGR2GRAY, 1);
-    cv::threshold(grey, grey, 0, 255, CV_THRESH_BINARY_INV + CV_THRESH_OTSU);
+    cv::cvtColor(img, grey, cv::COLOR_BGR2GRAY, 1);
+    cv::threshold(grey, grey, 0, 255, cv::THRESH_BINARY_INV + cv::THRESH_OTSU);
+
+    cv::imwrite("imggray_init.png", grey);
 
     LARGE_INTEGER freq;
     LARGE_INTEGER t0, tF, tDiff;
@@ -33,9 +35,17 @@ int main(int argc, char* argv[]) {
     elapsedTime = tDiff.QuadPart / (double) freq.QuadPart;
     std::cout << "cvblob:" << elapsedTime << std::endl;
 
+    std::list<cvb::SharedBlob> bl = blobs.get_BlobsList();
+
+    
+
     for (auto &a_blob : blobs.get_BlobsList()) {
+
+        unsigned b = a_blob->get_Area();
+
         // extract and draws blob contour
         auto contours = a_blob->get_Contour().get_ContourPolygon();
+
         if (contours.size() != 1) {
             for (auto &iter = contours.begin(); iter != contours.end(); iter++) {
                 auto next_iter = iter;
@@ -62,12 +72,12 @@ int main(int argc, char* argv[]) {
                     cv::line(img, *iter, *next_iter, cv::Scalar(0, 255, 0), 1, 8);
             }
         }
-
+  
         // draws bounding box
-        cv::rectangle(img, a_blob->get_BoundingBox(), cv::Scalar(255, 0, 255));
+        cv::rectangle(img, a_blob->get_BoundingBox(), cv::Scalar(255, 0, 255), 2);
 
         // draws centroid
-        cv::circle(img, a_blob->get_Centroid(), 2, cv::Scalar(255, 0, 0), 2);
+        cv::circle(img, a_blob->get_Centroid(), 5, cv::Scalar(255, 0, 0), 2);
     };
 
     cv::imwrite("imggray.png", grey);

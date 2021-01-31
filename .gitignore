@@ -22,3 +22,6 @@ Thumbs.db
 obj/
 [Rr]elease*/
 _ReSharper*/
+/.vs
+/test/out/build/x64-Debug (Standard)
+/vc/.vs/cvBlob/v16

@@ -149,6 +149,7 @@ SimpleBlobEnd:
         blobs.push_back(a_blob.second);
         a_blob.second->ComputeMoments();
     }
+    return;
 }
 
 void BlobList::LabelImage (const cv::Mat &img, Label max_label) {

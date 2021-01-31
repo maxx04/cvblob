@@ -48,7 +48,7 @@ namespace cvb {
     //        7 0 1
     //        6   2
     //        5 4 3
-    CVBLOB_EXPORT enum ChainCode {
+   CVBLOB_EXPORT enum ChainCode {
         ChainCode_up         = 0, ///< Up.
         ChainCode_up_right   = 1, ///< Up and right.
         ChainCode_right      = 2, ///< Right.
